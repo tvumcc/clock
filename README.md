@@ -9,15 +9,15 @@ These are the files for a digital clock built for fun and learning purposes with
 - Binary counter displaying the seconds
 
 ## To-do
-<input type=checkbox disabled checked> Make Logic Diagram (Logisim)<br>
-<input type=checkbox disabled > Make Schematic (KiCad)<br>
-<input type=checkbox disabled checked> Find and Purchase Components<br>
-<input type=checkbox disabled> Program EEPROM<br>
-<input type=checkbox disabled> Build Clock Prototype<br>
-<input type=checkbox disabled> Build Display Prototype<br>
-Tentative: <br>
-<input type=checkbox disabled> Design PCB<br>
-<input type=checkbox disabled> Assemble PCB<br>
+- [x] Make Logic Diagram (Logisim)
+- [ ] Make Schematic (KiCad)
+- [x] Find and Purchase Components
+- [ ] Program EEPROM
+- [ ] Build Clock Prototype
+- [ ] Build Display Prototype<br>
+Tentative:
+- [ ] Design PCB
+- [ ] Assemble PCB
 
 ## Component List
 - __1x__ [32.768khz Crystal](datasheets/CFS-206_CFS-145_E.pdf)
