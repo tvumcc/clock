@@ -1,2 +1,4 @@
 *.exe
 *.bin
+schematics/clock/
+!schematics/clock/clock.kicad_sch
