@@ -1,24 +1,23 @@
 # Digital Clock
 
-These are the files for a digital clock I built for fun using CMOS digital logic integrated circuits.
-
-## Showcase
-Coming Soon
+These are the files for a digital clock I built for fun using CMOS digital logic integrated circuits. This project was started during the summer of 2023 and fully finished by the spring of 2025.
 
 ## Features
 - 7 segment LED display
-- Setting the time
-- AM/PM Indicator
+- Setting the time using binary
+- AM/PM Indicator LED
 - Binary counter displaying seconds
+- Powered via 5V DC barrel jack
 
-## To-do
-- [x] Make Logic Diagram (Logisim)
-- [x] Make Schematic (KiCad)
-- [x] Find and Purchase Components
-- [x] Program EEPROM
-- [x] Build Breadboard Prototype
-- [ ] Design Protoboard Layout
-- [ ] Build Protoboard Layout
+## Photos and Screenshots
+
+![Final Clock](screenshots/clock.jpg)
+
+![KiCad Schematic](screenshots/schematic.png)
+
+![Logisim Diagram](screenshots/logisim.png)
+
+![Component Layout](screenshots/layout.png)
 
 ## Component List
 - __1x__ [AT28C64B-15PU 64kbit EEPROM](datasheets/at28c64b.pdf)

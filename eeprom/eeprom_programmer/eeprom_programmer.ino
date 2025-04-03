@@ -6,20 +6,25 @@
   its GPIO pins (The EEPROM required 5V supply and the input signals may have required >3.3V).
 */
 
+// In order to actually write to EEPROM, set this to true.
+// A write cycle will only be performed if the EEPROM has incorrect data at that address.
+#define WRITE true
+
 // Lookup Table that maps digits to their seven segment display counterparts
 uint8_t lookup_7s[10] = {
-		// gfedcba
-		0b00111111, // 0x0
-		0b00000110, // 0x1
-		0b01011011, // 0x2
-		0b01001111, // 0x3
-		0b01100110, // 0x4
-		0b01101101, // 0x5
-		0b01111101, // 0x6
-		0b00000111, // 0x7
-		0b01111111, // 0x8
-		0b01101111, // 0x9
+    // gfedcba
+    0b00111111, // 0x0
+    0b00000110, // 0x1
+    0b01011011, // 0x2
+    0b01001111, // 0x3
+    0b01100110, // 0x4
+    0b01101101, // 0x5
+    0b01111101, // 0x6
+    0b00000111, // 0x7
+    0b01111111, // 0x8
+    0b01101111, // 0x9
 };
+
 // GPIO pin numbers for the wires running to the EEPROM address pins (can be changed)
 uint8_t addr_pins[13] = {23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47};
 // GPIO pin numbers for the wires running to the EEPROM data pins (can be changed)
@@ -104,7 +109,7 @@ bool write_data(uint16_t addr, uint8_t data) {
   set_data(data);
 
   enable_write(true);
-  delayMicroseconds(10);
+  delayMicroseconds(100);
   enable_write(false);
   delayMicroseconds(300);
 
@@ -154,34 +159,51 @@ void setup() {
   init_all_pins();
   Serial.begin(57600);
   
-  // Write to the EEPROM
-  int limit = 8192;
-  Serial.println("\nCommencing the writing process...");
+  delay(1000);
 
-  for (int i = 0; i < limit; i++) {
-    bool already_written = write_data(i, bin_data(i));
-    if (hold_up) return;
-    Serial.print("Wrote value ");
-    Serial.print(bin_data(i), HEX);
-    Serial.print(" at address ");
-    if (already_written) Serial.print(" (X) ");
-    Serial.println(i, HEX);
+  // Write to the EEPROM
+  int limit = 0xFF;
+  if (WRITE) {
+    Serial.println("\nCommencing the writing process...");
+
+    for (int i = 0; i < limit; i++) {
+      bool already_written = write_data(i, bin_data(i));
+      if (hold_up) {
+        hold_up = false;
+        continue;
+      }
+      Serial.print("Wrote value ");
+      Serial.print(bin_data(i), HEX);
+      Serial.print(" at address ");
+      if (already_written) Serial.print(" (X) ");
+      Serial.println(i, HEX);
+    }
   }
+  
+  delay(1000);
 
   // Match the contents of the EEPROM to the supplied binary data
   Serial.println("Verifying...");
   int errors = 0;
 
   for (int i = 0; i < limit; i++) {
-    if (read_data(i) != bin_data(i)) {
-      Serial.print(read_data(i), HEX);
+    uint8_t read_value = read_data(i);
+    uint8_t bin_value = bin_data(i);
+
+    if (read_value != bin_value) {
+      Serial.print(read_value, HEX);
       Serial.print(" is present at address ");
       Serial.print(i, HEX);
       Serial.print(" instead of ");
-      Serial.println(bin_data(i), HEX);
+      Serial.println(bin_value, HEX);
+      errors++;
     }
-    
+
+    delay(10);
   }
+
+  enable_write(false);
+  enable_output(false);
 
   Serial.print("Done. ");
   Serial.print(errors);
